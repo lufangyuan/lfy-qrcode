@@ -10,7 +10,9 @@ function initialization() {
     $("#content").focus();
   }
   $("#qrcode").html(
-    '<img src="class/qr.php?content=http://www.keweikeji.com/qrcode/&logo=../images/ico/qr.png" style="width:100%;height:100%;object-fit:cover;" />'
+    '<img src="class/qr.php?content=' +
+      location.href +
+      '&logo=../images/ico/qr.png" style="width:100%;height:100%;object-fit:cover;" />'
   );
 }
 //生成二维码方法
