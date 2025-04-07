@@ -92,14 +92,14 @@ h1 {
 }
 .copyright {
   text-align: center;
+  font-size: 11px;
 }
 .copyright p {
-  font-size: 0.875em;
   font-weight: 400;
   color: #a8a8a8;
+  margin: 2px;
 }
 .copyright p a {
-  font-size: 0.875em;
   font-weight: 400;
   color: #a8a8a8;
   cursor: pointer;
