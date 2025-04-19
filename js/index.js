@@ -153,6 +153,12 @@ yearDom.innerText = new Date().getFullYear();
 if (window.self !== window.top) {
   const body = document.body;
   body.style.backgroundColor = "#fff";
+  const box = document.querySelector(".box");
+  if (box) {
+    box.style.backgroundColor = "#fff";
+    box.style.boxShadow = "none";
+    box.style.padding = "0 20px";
+  }
   const footer = document.querySelector(".copyright");
   if (footer) footer.style.display = "none";
 }
