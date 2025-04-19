@@ -46,7 +46,7 @@ function qr() {
       logo +
       '" style="width:100%;height:100%;object-fit:cover;" />'
   );
-  if ($(window).width() < 850) {
+  if ($(window).width() < 600) {
     $("#Modal").modal({ backdrop: "show" });
   } else {
     $("#content").focus();
