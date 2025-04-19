@@ -1,35 +1,41 @@
 body {
-  text-align: center;
   background-color: #e9e9e9;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  min-height: 650px;
   height: 100vh;
   display: flex;
+  gap: 20px;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 h1 {
-  margin-top: 60px;
+  color: #333;
+  font-size: 20px;
 }
-.tip {
-  margin-top: 10px;
-  margin-bottom: 100px;
-  color: #555;
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
 }
 .box {
+  flex: 1;
   background-color: #f3f3f3;
-  margin: auto;
-  max-width: 900px;
   display: flex;
   gap: 40px;
   padding: 50px;
+  box-sizing: border-box;
   border-radius: 20px;
   box-shadow: 5px 5px 50px #bbb;
 }
 .set {
-  width: 400px;
+  flex: 1;
 }
 .set button {
   width: 100%;
@@ -83,12 +89,9 @@ h1 {
 }
 
 .footer {
-  flex: auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  width: 100%;
-  margin-top: 20px;
 }
 .copyright {
   text-align: center;
@@ -127,17 +130,9 @@ textarea::-ms-input-placeholder {
   /* Internet Explorer 10+ */
   color: #ddd;
 }
-@media (max-width: 850px) {
+@media (max-width: 600px) {
   h1 {
-    margin-top: 30px;
-  }
-  .tip {
-    margin-bottom: 10px;
-  }
-  .box {
-    display: block;
-    width: 90%;
-    margin: 50px auto;
+    font-size: 14px;
   }
   .set {
     width: 100%;

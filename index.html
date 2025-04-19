@@ -20,38 +20,39 @@
     <link rel="shortcut icon" href="images/ico/qr.png" />
   </head>
   <body>
-    <h1>制作二维码</h1>
-    <p class="tip">链接 · 文本 · Emoji😃 👉 生成二维码，简单免费</p>
-    <div class="box">
-      <div class="set">
-        <form onsubmit="qr()">
-          <textarea
-            type="text"
-            id="content"
-            placeholder="输入您的内容"
-            maxlength="400"
-          ></textarea>
-        </form>
-        <div class="setlogo">
-          <div class="tit">设置LOGO：</div>
-          <input
-            style="display: none"
-            type="file"
-            id="file"
-            name="file"
-            accept="image/jpeg,image/png"
-            onchange="upload_logo()"
-          />
-          <div class="logo" id="logo"><p id="lg_ts">点击上传</p></div>
+    <h1>链接 · 文本 · Emoji😃 👉 生成二维码，简单免费</h1>
+    <div class="content">
+      <div class="box">
+        <div class="set">
+          <form onsubmit="qr()">
+            <textarea
+              type="text"
+              id="content"
+              placeholder="输入您的内容"
+              maxlength="400"
+            ></textarea>
+          </form>
+          <div class="setlogo">
+            <div class="tit">设置LOGO：</div>
+            <input
+              style="display: none"
+              type="file"
+              id="file"
+              name="file"
+              accept="image/jpeg,image/png"
+              onchange="upload_logo()"
+            />
+            <div class="logo" id="logo"><p id="lg_ts">点击上传</p></div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-success" id="btn_submit">
+              生成二维码
+            </button>
+          </div>
         </div>
-        <div>
-          <button type="button" class="btn btn-success" id="btn_submit">
-            生成二维码
-          </button>
+        <div class="qrcode" id="qrcode">
+          <p id="qr_ts">还没有生成</p>
         </div>
-      </div>
-      <div class="qrcode" id="qrcode">
-        <p id="qr_ts">还没有生成</p>
       </div>
     </div>
     <div class="footer">

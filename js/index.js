@@ -149,3 +149,10 @@ var prompt = function (message, style, time) {
 
 const yearDom = document.getElementById("year");
 yearDom.innerText = new Date().getFullYear();
+// 子应用
+if (window.self !== window.top) {
+  const body = document.body;
+  body.style.backgroundColor = "#fff";
+  const footer = document.querySelector(".copyright");
+  if (footer) footer.style.display = "none";
+}
