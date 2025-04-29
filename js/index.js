@@ -6,6 +6,7 @@ const logoTip = document.querySelector(".logo-tip"); // logo上传提示文字
 const logoClose = document.querySelector(".logo-close"); // logo删除按钮
 const logoImg = document.querySelector(".logo-img"); // logo img
 const qrBoxDom = document.querySelector(".qrcode-box"); // 二维码区域
+const downloadDom = document.querySelector(".download"); // 下载用容器
 const qrImgDom = document.querySelector("#qrcode"); // 二维码图片
 const qrLogoImgDom = document.querySelector("#qr-logo"); // 二维码图片
 const btnDom = document.querySelector("#btn"); // 提交按钮
@@ -80,7 +81,7 @@ btnDom.addEventListener("click", function submit() {
 
 // 点击二维码下载
 qrBoxDom.addEventListener("click", function () {
-  html2canvas(qrBoxDom).then((canvas) => {
+  html2canvas(downloadDom).then((canvas) => {
     const imageUrl = canvas.toDataURL("image/png");
     const a = document.createElement("a");
     a.href = imageUrl;
