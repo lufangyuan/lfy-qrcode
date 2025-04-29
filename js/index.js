@@ -1,155 +1,105 @@
-var logourl = ""; //记录上传图片的地址
-var isok = false; //默认图片验证不通过
-//初始化
-$(function () {
-  initialization();
-});
-//初始化方法
+// dom
+const inputDom = document.querySelector("#txt-content"); // 文本输入
+const inputFileDom = document.querySelector("#file"); // 文件input
+const logoDom = document.querySelector(".logo"); // 触发上传文件的dom
+const logoTip = document.querySelector(".logo-tip"); // logo上传提示文字
+const logoClose = document.querySelector(".logo-close"); // logo删除按钮
+const logoImg = document.querySelector(".logo-img"); // logo img
+const qrBoxDom = document.querySelector(".qrcode-box"); // 二维码区域
+const qrImgDom = document.querySelector("#qrcode"); // 二维码图片
+const qrLogoImgDom = document.querySelector("#qr-logo"); // 二维码图片
+const btnDom = document.querySelector("#btn"); // 提交按钮
+const yearDom = document.getElementById("year"); // 底部声明的年
+
+// logoUrl
+let logoUrl;
+
+// 初始化方法
 function initialization() {
-  if ($(window).width() >= 850) {
-    $("#content").focus();
-  }
-  $("#qrcode").html(
-    '<img src="class/qr.php?content=' +
-      location.href +
-      '&logo=../images/ico/qr.png" style="width:100%;height:100%;object-fit:cover;" />'
-  );
+  yearDom.innerText = new Date().getFullYear();
+  qrImgDom.src = `class/qr.php?content=${location.href}&logo=../images/ico/qr.png`;
 }
-//生成二维码方法
-function qr() {
-  var content = document
-    .getElementById("content")
-    .value.replace(/(^\s*)|(\s*$)/g, "");
-  if (content == "") {
-    prompt("请输入您的内容", "alert-warning");
+
+// 初始化
+initialization();
+
+// 文本框输入事件
+inputDom.addEventListener("input", function (e) {
+  const value = e.target.value;
+  if (value.replace(/\s/g, "") === "") initialization();
+});
+
+// 点击上传logo的div
+logoDom.addEventListener("click", function () {
+  inputFileDom.click();
+});
+
+// 文件input选择文件事件
+inputFileDom.addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    logoUrl = e.target.result;
+    logoImg.src = logoUrl;
+    logoImg.style.display = "block";
+    logoTip.style.display = "none";
+    logoClose.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+
+// 删除logo
+logoClose.addEventListener("click", function (e) {
+  e.stopPropagation();
+  logoUrl = null;
+  logoImg.src = "";
+  logoImg.style.display = "none";
+  logoTip.style.display = "block";
+  logoClose.style.display = "none";
+});
+
+// 生成二维码方法
+btnDom.addEventListener("click", function submit() {
+  let content = inputDom.value.replace(/(^\s*)|(\s*$)/g, "");
+  if (content === "") {
     initialization();
-    $("#content").val("");
-    $("#content").focus();
-    return false;
+    inputDom.value = "";
+    inputDom.focus();
+    return;
   }
   content = encodeURIComponent(content);
-  var logo = "";
-  if (logourl != "") {
-    logo = ".." + logourl.substr(7, 30);
-  }
-  $("#qrcode").html(
-    '<img src="class/qr.php?content=' +
-      content +
-      "&logo=" +
-      logo +
-      '" style="width:100%;height:100%;object-fit:cover;" />'
-  );
-  $("#qrcode_m").html(
-    '<img src="class/qr.php?content=' +
-      content +
-      "&logo=" +
-      logo +
-      '" style="width:100%;height:100%;object-fit:cover;" />'
-  );
-  if ($(window).width() < 600) {
-    $("#Modal").modal({ backdrop: "show" });
+  qrImgDom.src = `class/qr.php?content=${content}`;
+  if (logoUrl) {
+    qrLogoImgDom.src = logoUrl;
+    qrLogoImgDom.style.display = "block";
   } else {
-    $("#content").focus();
-  }
-}
-//文本框输入事件
-$("#content").on("input propertychange", function () {
-  if ($("#content").val().replace(/\s/g, "") == "") {
-    initialization();
+    qrLogoImgDom.style.display = "none";
   }
 });
-//点击生成二维码按钮
-$("#btn_submit").on("click", function () {
-  qr();
-});
-//点击上传logo的div
-$("#logo").on("click", function () {
-  $("#file").trigger("click"); //响应上传文件按钮
-});
-//上传图片方法
-function upload_logo() {
-  var formData = new FormData();
-  formData.append("file", $("#file")[0].files[0]);
-  if ($("#file")[0].files[0] == undefined) {
-    //用户点了取消
-    logourl = "";
-    $("#logo").html('<p id="lg_ts">点击上传</p>');
-    $("#lg_ts").html("点击上传");
-    return false;
-  }
-  //验证图片大小
-  var size = $("#file")[0].files[0].size;
-  if (size > 1024 * 1024) {
-    prompt("请上传小于1M的图片！", "alert-warning", 3000);
-    return false;
-  }
-  //验证图片尺寸
-  var MyTest = $("#file")[0].files[0];
-  var reader = new FileReader();
-  reader.readAsDataURL(MyTest);
-  reader.onload = function (theFile) {
-    var image = new Image();
-    image.src = theFile.target.result;
-    image.onload = function () {
-      if (this.width == this.height) {
-        isok = true;
-      } else {
-        isok = false;
-      }
-    };
-  };
-  setTimeout(function () {
-    if (!isok) {
-      prompt("请上传尺寸为1:1的图片！", "alert-warning", 3000);
-      return false;
-    }
-    $("#lg_ts").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-    $.ajax({
-      url: "class/upload_img.php",
-      data: formData,
-      type: "POST",
-      async: "true",
-      cache: false, //上传文件无需缓存
-      processData: false, //用于对data参数进行序列化处理 这里必须false
-      contentType: false,
-      success: function (data) {
-        if (data != "false") {
-          $("#logo").html(
-            '<img src="' +
-              data +
-              '" style="width:100%;height:100%;object-fit:cover;" />'
-          );
-          logourl = data; //记录上传图片的地址
-        } else {
-          prompt("上传失败", "alert-danger", 3000);
-          $("#logo").html('<p id="lg_ts">点击上传</p>');
-          $("#lg_ts").html("点击上传");
-        }
-      },
-      error: function () {
-        prompt("服务器连接失败", "alert-danger", 3000);
-        $("#logo").html('<p id="lg_ts">点击上传</p>');
-        $("#lg_ts").html("点击上传");
-      },
-    });
-  }, 100);
-}
-//弹出式消息
-var prompt = function (message, style, time) {
-  style = style === undefined ? "alert-success" : style;
-  time = time === undefined ? 1200 : time;
-  $("<div>")
-    .appendTo("body")
-    .addClass("alert " + style)
-    .html(message)
-    .show()
-    .delay(time)
-    .fadeOut();
-};
 
-const yearDom = document.getElementById("year");
-yearDom.innerText = new Date().getFullYear();
-// 子应用
+// 点击二维码下载
+qrBoxDom.addEventListener("click", function () {
+  html2canvas(qrBoxDom).then((canvas) => {
+    const imageUrl = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = imageUrl;
+    a.download = inputDom.value.slice(0, 30) || "image" + ".png";
+    a.click();
+  });
+});
+
+// 二维码区域阻止右键
+qrBoxDom.addEventListener("mousedown", function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+});
+qrBoxDom.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+});
+
+// 作为子应用时的处理
 if (window.self !== window.top) {
   const body = document.body;
   body.style.backgroundColor = "#fff";
